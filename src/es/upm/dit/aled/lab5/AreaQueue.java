@@ -14,5 +14,32 @@ import es.upm.dit.aled.lab5.gui.Position2D;
  */
 public class AreaQueue extends Area {
 
-	// TODO
+private Queue <Patient> waitQueue = new LinkedList <>();
+	
+public AreaQueue(String name, int time, int capacity, Position2D position) {
+	super(name, time, capacity, position);
+
+//Podria declarar declarar Queue <Patient> waitQueue aqui e inicializarlo en el constructor haciendo
+// this.waitQueue = new LinkedList<>();
+}
+@Override
+ public synchronized void enter(Patient p) {
+	try{
+		waitQueue.add(p);
+		waiting++;
+		while(numPatients==capacity || waitQueue.peek()!=p) {
+			wait();
+		}
+		waitQueue.remove();
+		waiting--;
+		numPatients++;
+	}catch (InterruptedException e) { System.out.print("Ha habido un fallo");
+	}
+// Es mas claro si dejo dentro del try/catch solo la parte del wait e intento sacar todo lo demás
+}
+
+	
+	
+	
+	
 }
